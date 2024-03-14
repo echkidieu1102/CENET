@@ -115,8 +115,8 @@ def get_history_target(quadruples, s_history_event_o, o_history_event_s):
     ss = quadruples[:, 0]
     rr = quadruples[:, 1]
     oo = quadruples[:, 2]
-    s_history_related = np.zeros((quadruples.shape[0], num_e), dtype=np.float)
-    o_history_related = np.zeros((quadruples.shape[0], num_e), dtype=np.float)
+    s_history_related = np.zeros((quadruples.shape[0], num_e), dtype=np.float16)
+    o_history_related = np.zeros((quadruples.shape[0], num_e), dtype=np.float16)
     for ix in tqdm.tqdm(range(quadruples.shape[0])):
         s_history_oid.append([])
         o_history_sid.append([])
@@ -156,15 +156,15 @@ def get_history_target(quadruples, s_history_event_o, o_history_event_s):
     o_history_related = csc_matrix(o_history_related)
     return s_history_label_true, o_history_label_true, s_history_related, o_history_related
 
-
+CWD = 'data/YAGO'
 graph_dict_train = {}
 
-train_data, train_times = load_quadruples('', 'train.txt')
-test_data, test_times = load_quadruples('', 'test.txt')
-dev_data, dev_times = load_quadruples('', 'valid.txt')
-# total_data, _ = load_quadruples('', 'train.txt', 'test.txt')
+train_data, train_times = load_quadruples(CWD, 'train.txt')
+test_data, test_times = load_quadruples(CWD, 'test.txt')
+dev_data, dev_times = load_quadruples(CWD, 'valid.txt')
+# total_data, _ = load_quadruples(CWD, 'train.txt', 'test.txt')
 
-num_e, num_r = get_total_number('', 'stat.txt')
+num_e, num_r = get_total_number(CWD, 'stat.txt')
 
 s_his = [[] for _ in range(num_e)]
 o_his = [[] for _ in range(num_e)]
@@ -182,32 +182,32 @@ o_his_cache = [[] for _ in range(num_e)]
 s_his_cache_t = [None for _ in range(num_e)]
 o_his_cache_t = [None for _ in range(num_e)]
 
-for tim in train_times:
-    print(str(tim)+'\t'+str(max(train_times)))
+for tim in tqdm.tqdm(train_times, desc="Create dictionary Graph train"):
+    # print(str(tim)+'\t'+str(max(train_times)))
     data = get_data_with_t(train_data, tim)
     graph_dict_train[tim] = get_big_graph(data, num_r)
 
-for i, train in enumerate(train_data):
-    if i % 10000 == 0:
-        print("train", i, len(train_data))
+for i, train in tqdm.tqdm(enumerate(train_data), total=len(train_data), desc="Historical of train set"):
+    # if i % 10000 == 0:
+    #     print("train", i, len(train_data))
     # if i == 10000:
     #     break
     t = train[3]
     if latest_t != t:
-
         for ee in range(num_e):
             if len(s_his_cache[ee]) != 0:
                 s_his[ee].append(s_his_cache[ee].copy())
                 s_his_t[ee].append(s_his_cache_t[ee])
                 s_his_cache[ee] = []
                 s_his_cache_t[ee] = None
+                
             if len(o_his_cache[ee]) != 0:
-
                 o_his[ee].append(o_his_cache[ee].copy())
                 o_his_t[ee].append(o_his_cache_t[ee])
                 o_his_cache[ee] = []
                 o_his_cache_t[ee] = None
         latest_t = t
+        
     s = train[0]
     r = train[1]
     o = train[2]
@@ -260,9 +260,10 @@ o_history_data_dev = [[] for _ in range(len(dev_data))]
 s_history_data_dev_t = [[] for _ in range(len(dev_data))]
 o_history_data_dev_t = [[] for _ in range(len(dev_data))]
 
-for i, dev in enumerate(dev_data):
-    if i % 10000 == 0:
-        print("valid", i, len(dev_data))
+for i, dev in tqdm.tqdm(enumerate(dev_data), total=len(dev_data), desc="Historical of valid set"):
+# for i, dev in enumerate(dev_data):
+    # if i % 10000 == 0:
+    #     print("valid", i, len(dev_data))
     t = dev[3]
     if latest_t != t:
         for ee in range(num_e):
@@ -322,9 +323,11 @@ o_history_data_test = [[] for _ in range(len(test_data))]
 s_history_data_test_t = [[] for _ in range(len(test_data))]
 o_history_data_test_t = [[] for _ in range(len(test_data))]
 
-for i, test in enumerate(test_data):
-    if i % 10000 == 0:
-        print("test", i, len(test_data))
+
+for i, test in tqdm.tqdm(enumerate(test_data), total=len(test_data), desc="Historical of test set"):
+# for i, test in enumerate(test_data):
+#     if i % 10000 == 0:
+#         print("test", i, len(test_data))
     t = test[3]
     if latest_t != t:
         for ee in range(num_e):
