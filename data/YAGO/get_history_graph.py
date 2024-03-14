@@ -238,20 +238,20 @@ for i, train in tqdm.tqdm(enumerate(train_data), total=len(train_data), desc="Hi
 s_label_train, o_label_train, s_history_related_train, o_history_related_train = \
     get_history_target(train_data, s_history_data, o_history_data)
 
-with open('train_graphs.txt', 'wb') as fp:
+with open(os.path.join(CWD,'train_graphs.txt'), 'wb') as fp:
     pickle.dump(graph_dict_train, fp)
 
-with open('train_history_sub.txt', 'wb') as fp:
+with open(os.path.join(CWD,'train_history_sub.txt'), 'wb') as fp:
     pickle.dump([s_history_data, s_history_data_t], fp)
-with open('train_history_ob.txt', 'wb') as fp:
+with open(os.path.join(CWD,'train_history_ob.txt'), 'wb') as fp:
     pickle.dump([o_history_data, o_history_data_t], fp)
-with open('train_s_label.txt', 'wb') as fp:
+with open(os.path.join(CWD,'train_s_label.txt'), 'wb') as fp:
     pickle.dump(s_label_train, fp)
-with open('train_o_label.txt', 'wb') as fp:
+with open(os.path.join(CWD,'train_o_label.txt'), 'wb') as fp:
     pickle.dump(o_label_train, fp)
-with open('train_s_frequency.txt', 'wb') as fp:
+with open(os.path.join(CWD,'train_s_frequency.txt'), 'wb') as fp:
     pickle.dump(s_history_related_train, fp)
-with open('train_o_frequency.txt', 'wb') as fp:
+with open(os.path.join(CWD,'train_o_frequency.txt'), 'wb') as fp:
     pickle.dump(o_history_related_train, fp)
 
 # print(s_history_data[0])
@@ -303,17 +303,17 @@ for i, dev in tqdm.tqdm(enumerate(dev_data), total=len(dev_data), desc="Historic
 
 s_label_dev, o_label_dev, s_history_related_dev, o_history_related_dev = \
     get_history_target(dev_data, s_history_data_dev, o_history_data_dev)
-with open('dev_history_sub.txt', 'wb') as fp:
+with open(os.path.join(CWD,'dev_history_sub.txt'), 'wb') as fp:
     pickle.dump([s_history_data_dev, s_history_data_dev_t], fp)
-with open('dev_history_ob.txt', 'wb') as fp:
+with open(os.path.join(CWD,'dev_history_ob.txt'), 'wb') as fp:
     pickle.dump([o_history_data_dev, o_history_data_dev_t], fp)
-with open('dev_s_label.txt', 'wb') as fp:
+with open(os.path.join(CWD,'dev_s_label.txt'), 'wb') as fp:
     pickle.dump(s_label_dev, fp)
-with open('dev_o_label.txt', 'wb') as fp:
+with open(os.path.join(CWD,'dev_o_label.txt'), 'wb') as fp:
     pickle.dump(o_label_dev, fp)
-with open('dev_s_frequency.txt', 'wb') as fp:
+with open(os.path.join(CWD,'dev_s_frequency.txt'), 'wb') as fp:
     pickle.dump(s_history_related_dev, fp)
-with open('dev_o_frequency.txt', 'wb') as fp:
+with open(os.path.join(CWD,'dev_o_frequency.txt'), 'wb') as fp:
     pickle.dump(o_history_related_dev, fp)
 
 
@@ -371,16 +371,16 @@ for i, test in tqdm.tqdm(enumerate(test_data), total=len(test_data), desc="Histo
 
 s_label_test, o_label_test, s_history_related_test, o_history_related_test = \
     get_history_target(test_data, s_history_data_test, o_history_data_test)
-with open('test_history_sub.txt', 'wb') as fp:
+with open(os.path.join(CWD,'test_history_sub.txt'), 'wb') as fp:
     pickle.dump([s_history_data_test, s_history_data_test_t], fp)
-with open('test_history_ob.txt', 'wb') as fp:
+with open(os.path.join(CWD,'test_history_ob.txt'), 'wb') as fp:
     pickle.dump([o_history_data_test, o_history_data_test_t], fp)
     # print(train)
-with open('test_s_label.txt', 'wb') as fp:
+with open(os.path.join(CWD,'test_s_label.txt'), 'wb') as fp:
     pickle.dump(s_label_test, fp)
-with open('test_o_label.txt', 'wb') as fp:
+with open(os.path.join(CWD,'test_o_label.txt'), 'wb') as fp:
     pickle.dump(o_label_test, fp)
-with open('test_s_frequency.txt', 'wb') as fp:
+with open(os.path.join(CWD,'test_s_frequency.txt'), 'wb') as fp:
     pickle.dump(s_history_related_test, fp)
-with open('test_o_frequency.txt', 'wb') as fp:
+with open(os.path.join(CWD,'test_o_frequency.txt'), 'wb') as fp:
     pickle.dump(o_history_related_test, fp)
