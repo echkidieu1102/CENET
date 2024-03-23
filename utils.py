@@ -157,43 +157,50 @@ def str2bool(v: str) -> bool:
         raise argparse.ArgumentTypeError("Boolean value expected, got" + str(v) + ".")
 
 
-def write2file(s_ranks, o_ranks, all_ranks, file_test):
-    s_ranks = np.asarray(s_ranks)
-    s_mr_lk = np.mean(s_ranks)
-    s_mrr_lk = np.mean(1.0 / s_ranks)
+def write2file(s_ranks, o_ranks, all_ranks, file_test, datasets="test"):
+    # s_ranks = np.asarray(s_ranks)
+    # s_mr_lk = np.mean(s_ranks)
+    # s_mrr_lk = np.mean(1.0 / s_ranks)
 
-    print("Subject test MRR (lk): {:.6f}".format(s_mrr_lk))
-    print("Subject test MR (lk): {:.6f}".format(s_mr_lk))
-    file_test.write("Subject test MRR (lk): {:.6f}".format(s_mrr_lk) + '\n')
-    file_test.write("Subject test MR (lk): {:.6f}".format(s_mr_lk) + '\n')
-    for hit in [1, 3, 10]:
-        avg_count_sub_lk = np.mean((s_ranks <= hit))
-        print("Subject test Hits (lk) @ {}: {:.6f}".format(hit, avg_count_sub_lk))
-        file_test.write("Subject test Hits (lk) @ {}: {:.6f}".format(hit, avg_count_sub_lk) + '\n')
+    # print("Subject test MRR (lk): {:.6f}".format(s_mrr_lk))
+    # print("Subject test MR (lk): {:.6f}".format(s_mr_lk))
+    # file_test.write("Subject test MRR (lk): {:.6f}".format(s_mrr_lk) + '\n')
+    # file_test.write("Subject test MR (lk): {:.6f}".format(s_mr_lk) + '\n')
+    # for hit in [1, 3, 10]:
+    #     avg_count_sub_lk = np.mean((s_ranks <= hit))
+    #     print("Subject test Hits (lk) @ {}: {:.6f}".format(hit, avg_count_sub_lk))
+    #     file_test.write("Subject test Hits (lk) @ {}: {:.6f}".format(hit, avg_count_sub_lk) + '\n')
 
-    o_ranks = np.asarray(o_ranks)
-    o_mr_lk = np.mean(o_ranks)
-    o_mrr_lk = np.mean(1.0 / o_ranks)
+    # o_ranks = np.asarray(o_ranks)
+    # o_mr_lk = np.mean(o_ranks)
+    # o_mrr_lk = np.mean(1.0 / o_ranks)
 
-    print("Object test MRR (lk): {:.6f}".format(o_mrr_lk))
-    print("Object test MR (lk): {:.6f}".format(o_mr_lk))
-    file_test.write("Object test MRR (lk): {:.6f}".format(o_mrr_lk) + '\n')
-    file_test.write("Object test MR (lk): {:.6f}".format(o_mr_lk) + '\n')
-    for hit in [1, 3, 10]:
-        avg_count_obj_lk = np.mean((o_ranks <= hit))
-        print("Object test Hits (lk) @ {}: {:.6f}".format(hit, avg_count_obj_lk))
-        file_test.write("Object test Hits (lk) @ {}: {:.6f}".format(hit, avg_count_obj_lk) + '\n')
+    # print("Object test MRR (lk): {:.6f}".format(o_mrr_lk))
+    # print("Object test MR (lk): {:.6f}".format(o_mr_lk))
+    # file_test.write("Object test MRR (lk): {:.6f}".format(o_mrr_lk) + '\n')
+    # file_test.write("Object test MR (lk): {:.6f}".format(o_mr_lk) + '\n')
+    # for hit in [1, 3, 10]:
+    #     avg_count_obj_lk = np.mean((o_ranks <= hit))
+    #     print("Object test Hits (lk) @ {}: {:.6f}".format(hit, avg_count_obj_lk))
+    #     file_test.write("Object test Hits (lk) @ {}: {:.6f}".format(hit, avg_count_obj_lk) + '\n')
 
     all_ranks = np.asarray(all_ranks)
     all_mr_lk = np.mean(all_ranks)
     all_mrr_lk = np.mean(1.0 / all_ranks)
 
-    print("ALL test MRR (lk): {:.6f}".format(all_mrr_lk))
-    print("ALL test MR (lk): {:.6f}".format(all_mr_lk))
-    file_test.write("ALL test MRR (lk): {:.6f}".format(all_mrr_lk) + '\n')
-    file_test.write("ALL test MR (lk): {:.6f}".format(all_mr_lk) + '\n')
+    # print("ALL test MRR (lk): {:.6f}".format(all_mrr_lk))
+    # print("ALL test MR (lk): {:.6f}".format(all_mr_lk))
+    # file_test.write("ALL test MRR (lk): {:.6f}".format(all_mrr_lk) + '\n')
+    # file_test.write("ALL test MR (lk): {:.6f}".format(all_mr_lk) + '\n')
+    # for hit in [1, 3, 10]:
+    #     avg_count_all_lk = np.mean((all_ranks <= hit))
+    #     print("ALL test Hits (lk) @ {}: {:.6f}".format(hit, avg_count_all_lk))
+    #     file_test.write("ALL test Hits (lk) @ {}: {:.6f}".format(hit, avg_count_all_lk) + '\n')
+    
+    hits_all = {}
     for hit in [1, 3, 10]:
         avg_count_all_lk = np.mean((all_ranks <= hit))
-        print("ALL test Hits (lk) @ {}: {:.6f}".format(hit, avg_count_all_lk))
-        file_test.write("ALL test Hits (lk) @ {}: {:.6f}".format(hit, avg_count_all_lk) + '\n')
+        hits_all[hit] = avg_count_all_lk
+    print("{} set:\n\tMRR: {:.6f}\tHits@:{}".format(datasets,all_mrr_lk,hits_all))
+    file_test.write("{} set:\n\tMRR: {:.6f}\tHits@:{}".format(datasets,all_mrr_lk,hits_all)+"\n")
     return all_mrr_lk
