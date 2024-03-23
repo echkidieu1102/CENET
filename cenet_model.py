@@ -259,7 +259,7 @@ class CENET(nn.Module):
                    (s_ce_all_acc + o_ce_all_acc) / 2
 
         elif mode_lk == 'Oracle':
-            print('Oracle Training')
+            # print('Oracle Training')
             s_ce_loss, _, _ = self.oracle_loss(s, r, self.rel_embeds[:self.num_rel],
                                                s_history_label_true, s_frequency_hidden)
             o_ce_loss, _, _ = self.oracle_loss(o, r, self.rel_embeds[self.num_rel:],
@@ -275,7 +275,7 @@ class CENET(nn.Module):
         # print('# Bias Ratio', torch.sum(tmp_label).item() / tmp_label.shape[0])
         ce_correct = torch.sum(torch.eq(tmp_label, torch.squeeze(history_label)))
         ce_accuracy = 1. * ce_correct.item() / tmp_label.shape[0]
-        print('# CE Accuracy', ce_accuracy)
+        # print('# CE Accuracy', ce_accuracy)
         ce_loss = self.crossEntropy(torch.squeeze(history_label_pred), torch.squeeze(history_label))
         return ce_loss, history_label_pred, ce_accuracy * tmp_label.shape[0]
 
@@ -293,10 +293,10 @@ class CENET(nn.Module):
         nce = torch.sum(torch.gather(torch.log(preds1 + preds2), 1, actor2.view(-1, 1)))
         nce /= -1. * actor2.shape[0]
 
-        pred_actor2 = torch.argmax(preds1 + preds2, dim=1)  # predicted result
-        correct = torch.sum(torch.eq(pred_actor2, actor2))
-        accuracy = 1. * correct.item() / actor2.shape[0]
-        print('# Batch accuracy', accuracy)
+        # pred_actor2 = torch.argmax(preds1 + preds2, dim=1)  # predicted result
+        # correct = torch.sum(torch.eq(pred_actor2, actor2))
+        # accuracy = 1. * correct.item() / actor2.shape[0]
+        # print('# Batch accuracy', accuracy)
 
         return nce, preds1 + preds2
 
@@ -309,14 +309,14 @@ class CENET(nn.Module):
 
         if oracle:
             preds = torch.mul(preds, trust_musk)
-            print('$Batch After Oracle accuracy:', end=' ')
-        else:
-            print('$Batch No Oracle accuracy:', end=' ')
+            # print('$Batch After Oracle accuracy:', end=' ')
+        # else:
+        #     print('$Batch No Oracle accuracy:', end=' ')
         # compute the correct triples
         pred_actor2 = torch.argmax(preds, dim=1)  # predicted result
         correct = torch.sum(torch.eq(pred_actor2, actor2))
         accuracy = 1. * correct.item() / actor2.shape[0]
-        print(accuracy)
+        # print(accuracy)
         # print('Batch Error', 1 - accuracy)
 
         total_loss = nce_loss + ce_loss
