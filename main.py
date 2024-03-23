@@ -10,6 +10,7 @@ import datetime
 import os
 import pickle
 import time
+import tqdm
 
 import numpy as np
 import torch
@@ -164,10 +165,11 @@ def main_portal(args):
 
         epoch = 0
         best_oracle_all_mrr_lk = 0
-        while epoch < args.max_epochs:
+        # while epoch < args.max_epochs:
+        for epoch in tqdm.tqdm(range(args.max_epochs), desc="Train"):
             model.train()
             epoch += 1
-            print('$Start Epoch: ', epoch)
+            # print('$Start Epoch: ', epoch)
             loss_epoch = 0
             time_begin = time.time()
             _batch = 0
@@ -202,16 +204,16 @@ def main_portal(args):
                 optimizer.zero_grad()
                 loss_epoch += error.item()
 
-                print("# CENET batch: " + str(_batch) + ' finished. Used time: ' +
-                      str(time.time() - time_begin) + ', Loss: ' + str(error.item()))
+                # print("# CENET batch: " + str(_batch) + ' finished. Used time: ' +
+                #       str(time.time() - time_begin) + ', Loss: ' + str(error.item()))
                 file_training.write(
                     "epoch: " + str(epoch) + "batch: " + str(_batch) + ' finished. Used time: '
                     + str(time.time() - time_begin) + ', Loss: ' + str(error.item()) + '\n')
                 _batch += 1
 
             epoch_time = time.time()
-            print("Done\nEpoch {:04d} | Loss {:.4f}| time {:.4f}".
-                  format(epoch, loss_epoch / _batch, epoch_time - time_begin))
+            # print("Done\nEpoch {:04d} | Loss {:.4f}| time {:.4f}".
+            #       format(epoch, loss_epoch / _batch, epoch_time - time_begin))
             file_training.write("******\nEpoch {:04d} | Loss {:.4f}| time {:.4f}".
                                 format(epoch, loss_epoch / _batch, epoch_time - time_begin) + '\n')
 
@@ -224,10 +226,10 @@ def main_portal(args):
                                                                                                      dev_o_label,
                                                                                                      dev_s_frequency,
                                                                                                      dev_o_frequency)
-                file_validation.write("\nNo Oracle: \n")
-                raw_all_mrr_lk = utils.write2file(s_ranks2, o_ranks2, all_ranks2, file_validation)
+                # file_validation.write("\nNo Oracle: \n")
+                # raw_all_mrr_lk = utils.write2file(s_ranks2, o_ranks2, all_ranks2, file_validation, "validation")
                 file_validation.write("\nGT Oracle: \n")
-                oracle_all_mrr_lk = utils.write2file(s_ranks3, o_ranks3, all_ranks3, file_validation)
+                oracle_all_mrr_lk = utils.write2file(s_ranks3, o_ranks3, all_ranks3, file_validation, "validation")
                 file_validation.write("\n-------------------------------------\n")
                 if oracle_all_mrr_lk > best_oracle_all_mrr_lk:
                     best_oracle_all_mrr_lk = oracle_all_mrr_lk
@@ -242,10 +244,10 @@ def main_portal(args):
                                                                                                      dev_o_label,
                                                                                                      dev_s_frequency,
                                                                                                      dev_o_frequency)
-        file_validation.write("No Oracle: \n")
-        raw_all_mrr_lk = utils.write2file(s_ranks2, o_ranks2, all_ranks2, file_validation)
+        # file_validation.write("No Oracle: \n")
+        # raw_all_mrr_lk = utils.write2file(s_ranks2, o_ranks2, all_ranks2, file_validation, "validation")
         file_validation.write("\nGT Oracle: \n")
-        oracle_all_mrr_lk = utils.write2file(s_ranks3, o_ranks3, all_ranks3, file_validation)
+        oracle_all_mrr_lk = utils.write2file(s_ranks3, o_ranks3, all_ranks3, file_validation, "validation")
         if oracle_all_mrr_lk > best_oracle_all_mrr_lk:
             best_oracle_all_mrr_lk = oracle_all_mrr_lk
             torch.save(model, model_path + '/' + args.dataset + '_best.pth')
@@ -301,9 +303,9 @@ def main_portal(args):
             optimizer_oracle.step()
             optimizer_oracle.zero_grad()
             total_oracle_loss += error.item()
-            print('Oracle batch loss:', error.item())
+            # print('Oracle batch loss:', error.item())
             file_oracle.write('Oracle batch loss:' + str(error.item()) + '\n')
-        print('oracle_epoch:', oracle_epoch, ' Oracle loss: ', total_oracle_loss)
+        # print('oracle_epoch:', oracle_epoch, ' Oracle loss: ', total_oracle_loss)
         file_oracle.write('oracle_epoch:' + str(oracle_epoch) +
                           ' Oracle loss: ' + str(total_oracle_loss) + '\n')
     torch.save(model, model_path + '/' + args.dataset + '_best.pth')
