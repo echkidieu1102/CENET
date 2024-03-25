@@ -166,9 +166,9 @@ def main_portal(args):
         epoch = 0
         best_oracle_all_mrr_lk = 0
         # while epoch < args.max_epochs:
-        for epoch in tqdm.tqdm(range(args.max_epochs), desc="Train"):
+        for epoch in tqdm.tqdm(range(1,args.max_epochs+1), desc="Train"):
             model.train()
-            epoch += 1
+            # epoch += 1
             # print('$Start Epoch: ', epoch)
             loss_epoch = 0
             time_begin = time.time()
@@ -270,8 +270,9 @@ def main_portal(args):
     model.freeze_parameter()  # freeze parameter except Oracle
     file_oracle = open(os.path.join(main_dirName, "training_oracle_record.txt"), "w")
 
-    while oracle_epoch < args.oracle_epochs:
-        oracle_epoch += 1
+    for oracle_epoch in tqdm.tqdm(range(1,args.oracle_epochs+1), desc="Train Oracle"):
+    # while oracle_epoch < args.oracle_epochs:
+    #     oracle_epoch += 1
         total_oracle_loss = 0
 
         for batch_data in utils.make_batch(train_data,
