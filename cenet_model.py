@@ -94,7 +94,7 @@ class CENET(nn.Module):
         pe[:, 1::2] = torch.cos(position * div_term)
         self.register_buffer('pe', pe)
         """
-
+        self.loss_e = nn.CrossEntropyLoss()
         self.dropout = nn.Dropout(args.dropout)
         self.logSoftmax = nn.LogSoftmax()
         self.softmax = nn.Softmax()
@@ -290,8 +290,9 @@ class CENET(nn.Module):
 
         # cro_entr_loss = self.criterion_link(preds1 + preds2, actor2)
 
-        nce = torch.sum(torch.gather(torch.log(preds1 + preds2), 1, actor2.view(-1, 1)))
-        nce /= -1. * actor2.shape[0]
+        # nce = torch.sum(torch.gather(torch.log(preds1 + preds2), 1, actor2.view(-1, 1)))
+        # nce /= -1. * actor2.shape[0]
+        nce = self.loss_e(preds1+preds2, actor2)
 
         # pred_actor2 = torch.argmax(preds1 + preds2, dim=1)  # predicted result
         # correct = torch.sum(torch.eq(pred_actor2, actor2))
